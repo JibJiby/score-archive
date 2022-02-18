@@ -1,0 +1,4 @@
+{
+  // 코드 포멧팅을 전적으로 prettier에게 맡김.
+  "extends": ["plugin:prettier/recommended"]
+}
