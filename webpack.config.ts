@@ -28,6 +28,8 @@ const config: Configuration = {
       '@utils': path.resolve(__dirname, 'utils'),
       '@typings': path.resolve(__dirname, 'typings'),
       '@styles': path.resolve(__dirname, 'styles'),
+      '@reducers': path.resolve(__dirname, 'reducers'),
+      '@store': path.resolve(__dirname, 'store'),
     },
   },
   entry: {

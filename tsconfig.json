@@ -19,6 +19,8 @@
       "@utils/*": ["utils/*"],
       "@typings/*": ["typings/*"],
       "@styles/*":["styles/*"],
+      "@reducers/*": ["reducers/*"],
+      "@store/*": ["store/*"]
     }
   }
 }
