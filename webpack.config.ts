@@ -27,6 +27,7 @@ const config: Configuration = {
       '@pages': path.resolve(__dirname, 'pages'),
       '@utils': path.resolve(__dirname, 'utils'),
       '@typings': path.resolve(__dirname, 'typings'),
+      '@styles': path.resolve(__dirname, 'styles'),
     },
   },
   entry: {
@@ -48,6 +49,8 @@ const config: Configuration = {
             ],
             '@babel/preset-react',
             '@babel/preset-typescript',
+            // css props
+            '@emotion/babel-preset-css-prop',
           ],
           env: {
             development: {

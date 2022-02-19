@@ -3,12 +3,13 @@
     "esModuleInterop": true,
     "sourceMap": true, // 에러 위치 알려줘서, 디버깅하기 쉬움.
     "lib": ["ES2020", "DOM"], // 브라우저용. 최신 문법인 es2020
-    "jsx": "react", // jsx에 리액트 말고 다른 언어도 있기 때문에.
+    "jsx": "preserve", // jsx에 리액트 말고 다른 언어도 있기 때문에.
     "module": "esnext", // 최신 모듈을 쓰겠다는 의미. 안쓰면 commonJS로 됨.
     "moduleResolution": "Node", //최신 모듈인 import export를 Node가 해석하게 하겠다.
     "target": "es5", //변환 후 js 버전
     "strict": true,  // 필수. 안쓰면 AnyScript 됨.
     "resolveJsonModule": true, // import '~~.json' 허락.
+    "jsxImportSource": "@emotion/react",  // css props 사용을 위해
     "baseUrl": ".", // 현위치. 그러니까 tsconfig있는 위치를 기준으로 함.
     "paths": {
       "@hooks/*": ["hooks/*"],
@@ -16,7 +17,8 @@
       "@layouts/*": ["layouts/*"],
       "@pages/*": ["pages/*"],
       "@utils/*": ["utils/*"],
-      "@typings/*": ["typings/*"]
+      "@typings/*": ["typings/*"],
+      "@styles/*":["styles/*"],
     }
   }
 }
