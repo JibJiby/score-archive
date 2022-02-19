@@ -3,6 +3,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import webpack from 'webpack'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+import Dotenv from 'dotenv-webpack'
 
 // 'devServer' 인자를 인식하지 못하는 문제.
 import { Configuration as WebpackConfiguration } from 'webpack'
@@ -81,6 +82,8 @@ const config: Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: isDevelopment ? 'development' : 'production',
     }),
+    // .env 적용하기 위해
+    new Dotenv(),
   ],
   output: {
     path: path.join(__dirname, 'dist'),
