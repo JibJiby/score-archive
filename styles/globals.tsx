@@ -17,7 +17,7 @@ export const globalStyles = (
       html,
       body {
         background-color: rgb(230, 231, 236);
-        font-family: 'Noto Sans KR', sarif;
+        font-family: 'Noto Sans KR', sans-serif;
         font-size: 15px;
       }
     `}
