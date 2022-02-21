@@ -3,50 +3,35 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { buttonStyle, inputStyle, logoStyle } from './styles'
 import useInput from '@hooks/useInput'
-import { firestore } from '../../firebase'
-import { collection, doc, getDoc } from 'firebase/firestore'
-import { getDownloadURL, getStorage, ref, listAll } from 'firebase/storage'
+import { firestore, storage } from '../../firebase'
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
+import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 
 const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
   const dispatch = useDispatch()
 
-  const onClickSearchBtn = useCallback(() => {
-    dispatch(scoreSlice.actions.setScore(scoreTitle))
+  const onClickSearchBtn = useCallback(async () => {
+    // TODO: 훅으로 빼기 ??
+    const scoreCol = collection(firestore, 'score')
+    const q = query(scoreCol, where('title', '==', scoreTitle))
+    const snapshot = await getDocs(q)
+    if (snapshot.empty) {
+      dispatch(scoreSlice.actions.setScore('없습니다'))
+    } else {
+      // TODO: 항상 인덱스 0이 아닐 수 있음
+      const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
+      console.log(resultHref)
+      dispatch(scoreSlice.actions.setScore('있습니다!!'))
+      try {
+        const url = await getDownloadURL(ref(storage, resultHref)) // 갑자기 됨 ??
+        console.log(url)
+      } catch (e) {
+        alert('url이 유효하지 않습니다.')
+        console.error(e)
+      }
+    }
   }, [scoreTitle])
-
-  //https://github.com/JamieCurnow/firebase-v9-typescript-example/blob/main/src/composables/useDb.ts
-
-  // 단순화 하는 과정
-  //https://javascript.plainenglish.io/using-firestore-with-typescript-in-the-v9-sdk-cf36851bb099
-
-  useEffect(() => {
-    ;(async () => {
-      const scoreCol = collection(firestore, 'score')
-      const scoreRef = doc(scoreCol, '7QwInD4KWok3vXafkjya')
-      const result = await getDoc(scoreRef)
-      console.log(result.data())
-
-      console.log('-'.repeat(100))
-
-      //https://firebase.google.com/docs/storage/web/create-reference?hl=ko
-      const storage = getStorage()
-      const storageRef = ref(storage, 'images/abc.jpeg')
-      console.log(storageRef.name)
-      console.log(storageRef.fullPath)
-
-      //https://firebase.google.com/docs/storage/web/download-files?hl=ko#create_a_reference
-      // const gsHref = storageRef.toString()
-      // console.log(gsHref) // gs:// ~~~
-
-      const url = await getDownloadURL(storageRef)
-      console.log(url)
-
-      const url2 = await getDownloadURL(ref(storage, '찬양하세.jpeg')) // 갑자기 됨 ??
-      // const url2 = await getDownloadURL(ref(storage, 'images/찬양하세.jpeg'))
-      console.log(url2)
-    })()
-  }, [])
 
   return (
     <div

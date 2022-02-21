@@ -16,7 +16,13 @@ const Header = () => {
       >
         로고
       </Logo>
-      <LoginButton>로그인 버튼</LoginButton>
+      <LoginButton
+        onClick={() => {
+          navigate('/login')
+        }}
+      >
+        로그인 버튼
+      </LoginButton>
     </header>
   )
 }

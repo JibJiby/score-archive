@@ -1,97 +1,121 @@
+import React, { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import useInput from '@hooks/useInput'
-import fetcher from '@utils/fetcher'
-import axios from 'axios'
-import React, { ColgroupHTMLAttributes, useCallback, useState } from 'react'
-import useSWR from 'swr'
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd'
-import { Navigate } from 'react-router-dom'
-
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 12 },
-}
-const tailLayout = {
-  wrapperCol: { offset: 6, span: 12 },
-}
+import { auth } from '../../firebase'
 
 const LogIn = () => {
-  const { data, error, mutate } = useSWR('/api/users', fetcher)
-
-  const [logInError, setLogInError] = useState(false)
   const [email, onChangeEmail] = useInput('')
-  const [password, onChangePassword] = useInput('')
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      setLogInError(false)
-      axios
-        .post(
-          '/api/users/login',
-          { email, password },
-          {
-            withCredentials: true,
-          },
-        )
-        .then((response) => {
-          //https://swr.vercel.app/blog/swr-v1#change-revalidate-to-mutate
-          mutate()
-        })
-        .catch((error) => {
-          setLogInError(error.response?.data?.statusCode === 401)
-        })
-    },
-    [email, password],
-  )
+  const [password, onChangepassword] = useInput('')
+  const navigate = useNavigate()
 
-  if (data === undefined) {
-    return <div>로딩중...</div>
-  }
-
-  if (data) {
-    return <Navigate to="/home" />
-  }
+  const onLoginClick = useCallback(() => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        console.log('user')
+        console.log(user)
+        navigate('/')
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorCode, errorMessage)
+        alert('로그인 오류')
+      })
+    // dependency 꼭 넣어서 업데이트 확인할 수 있게
+  }, [email, password])
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      {/* 중앙 정렬을 위한 div */}
-      <div style={{ width: '100%' }}>
-        <Row>
-          <Col xs={20}>
-            <Form
-              {...layout}
-              name="basic"
-              initialValues={{ remember: true }}
-              // onFinish={onFinish}
-              // onFinishFailed={onFinishFailed}
-            >
-              <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: '아이디를 입력해주세요.' }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: '비밀번호를 입력해주세요.' }]}
-              >
-                <Input.Password />
-              </Form.Item>
-
-              <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        userSelect: 'none',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'tomato',
+          display: 'inline',
+          width: '300px',
+          height: '60px',
+          marginBottom: '30px',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          navigate('/')
+        }}
+      >
+        로고
+      </div>
+      <div
+        className="input-wrapper"
+        style={{
+          padding: '24px',
+          width: '553px',
+        }}
+      >
+        <div
+          style={{
+            borderRadius: '6px 6px 0 0',
+            boxShadow: 'none',
+          }}
+        >
+          <input
+            type="text"
+            placeholder="아이디"
+            style={{
+              padding: '17px 18px 17px 19px',
+              border: '1px solid #dadada',
+              width: '100%',
+              borderRadius: '6px 6px 0 0',
+            }}
+            value={email}
+            onChange={onChangeEmail}
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="비밀번호"
+            style={{
+              padding: '17px 18px 17px 19px',
+              border: '1px solid #dadada',
+              width: '100%',
+              borderRadius: '0 0 6px 6px',
+            }}
+            value={password}
+            onChange={onChangepassword}
+          />
+        </div>
+        <div
+          style={{
+            marginTop: '42px',
+          }}
+        >
+          <button
+            style={{
+              backgroundColor: '#0c243b',
+              width: '100%',
+              display: 'block',
+              borderRadius: '6px',
+              border: 'solid 1px rgba(0,0,0,.15)',
+              cursor: 'pointer',
+              padding: '17px 0 15px',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '18px',
+            }}
+            onClick={onLoginClick}
+          >
+            로그인
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app'
 //https://stackoverflow.com/questions/59050195/uncaught-typeerror-cannot-read-property-initializeapp-of-undefined
 import { getFirestore, collection } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
   // firebase 설정과 관련된 개인 정보
@@ -17,11 +18,8 @@ const firebaseConfig = {
 // firebaseConfig 정보로 firebase 시작
 firebase.initializeApp(firebaseConfig)
 
-// firebase의 firestore 인스턴스를 변수에 저장
-// const firestore = firebase.getApp()
-
-// 필요한 곳에서 사용할 수 있도록 내보내기
-// export { firestore }
-
+// 이 파일에서 initialize 해서 아래 export 의미 있음
+// initialize 안하고 get() 의미 없음
 export const firestore = getFirestore()
 export const storage = getStorage()
+export const auth = getAuth()
