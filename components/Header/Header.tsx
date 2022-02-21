@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { headerStyle, LoginButton, Logo } from './styles'
+import { headerStyle, LoginButton, Logo, NewScoreButton, userButtonWrapperStyle } from './styles'
 import { useNavigate } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
@@ -21,14 +21,22 @@ const Header = () => {
     <header css={headerStyle}>
       <Logo
         onClick={() => {
-          console.log('/로 이동')
           navigate('/')
         }}
       >
         로고
       </Logo>
       {user ? (
-        <LoginButton onClick={onLogout}>로그아웃</LoginButton>
+        <div css={userButtonWrapperStyle}>
+          <NewScoreButton
+            onClick={() => {
+              navigate('/newscore')
+            }}
+          >
+            추가
+          </NewScoreButton>
+          <LoginButton onClick={onLogout}>로그아웃</LoginButton>
+        </div>
       ) : (
         <LoginButton onClick={onLogin}>로그인</LoginButton>
       )}

@@ -8,7 +8,7 @@ const convertConsonant = (word: string): string => {
   const d = Hangul.disassemble(word.replace(/\s/, ''), true)
   const result: string[] = []
   d.forEach((v) => result.push(v[0]))
-  return result.join('')
+  return result.join('').replace(/\s/, '')
 }
 
 export default convertConsonant

@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
-// import { signInWithEmailAndPassword } from 'firebase/auth'
 import useInput from '@hooks/useInput'
 import { auth } from '../../firebase'
+import { inputWrapperStyle } from './styles'
+import { message } from 'antd'
 
 const LogIn = () => {
   const [email, onChangeEmail] = useInput('')
@@ -14,25 +15,21 @@ const LogIn = () => {
   // https://github.com/csfrequency/react-firebase-hooks/tree/ab6214822fdc0c280ea39e001db09bc2bbc5264d/auth#usesigninwithemailandpassword
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth)
 
-  const onLoginClick = useCallback(() => {
+  const onLoginClick = useCallback(async () => {
     // react firebase hooks
-    signInWithEmailAndPassword(email, password)
+    try {
+      const result = await signInWithEmailAndPassword(email, password)
+      console.log(result)
+      message.success('로그인 성공', 0.4)
+    } catch (e) {
+      console.error(e)
+    }
 
     // dependency 꼭 넣어서 업데이트 확인할 수 있게
   }, [email, password])
 
-  if (error) {
-    // FIXME: 2번 뜸
-    alert('로그인 실패!!')
-
-    //https://stackoverflow.com/questions/42083181/is-it-possible-to-return-empty-in-react-render-function
-    // 하지만 이렇게 하면 또다시 로그인 X
-    // return null
-  }
-
   if (user) {
     // 로그인 중이거나 로그인 성공했다면
-    console.log('로그인 중!')
     navigate('/')
   }
 
@@ -63,13 +60,7 @@ const LogIn = () => {
       >
         로고
       </div>
-      <div
-        className="input-wrapper"
-        style={{
-          padding: '24px',
-          width: '553px',
-        }}
-      >
+      <div className="input-wrapper" css={inputWrapperStyle}>
         <div
           style={{
             borderRadius: '6px 6px 0 0',
@@ -84,6 +75,7 @@ const LogIn = () => {
               border: '1px solid #dadada',
               width: '100%',
               borderRadius: '6px 6px 0 0',
+              textTransform: 'lowercase',
             }}
             value={email}
             onChange={onChangeEmail}

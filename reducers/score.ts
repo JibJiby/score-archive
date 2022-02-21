@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export type QueryResult = {
+  title: string
+  href: string
+  consonant: Array<string>
+}
+
 export type ScoreState = {
-  score: string | null
+  score: Array<QueryResult> | null
 }
 
 const initialState: ScoreState = {

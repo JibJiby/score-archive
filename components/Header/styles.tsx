@@ -28,6 +28,23 @@ export const LoginButton = styled.div`
   border-radius: 4px;
   padding: 0.5rem 0.8rem;
   cursor: pointer;
-  background-color: rgb(109, 61, 246);
+  background-color: #49b95e;
   color: white;
+`
+
+export const NewScoreButton = styled.div`
+  color: #001c34;
+  border-color: #001c34;
+  border: 1px solid transparent;
+
+  font-weight: 600;
+  cursor: pointer;
+`
+
+export const userButtonWrapperStyle = css`
+  display: flex;
+  flexdirection: row;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 140px;
 `

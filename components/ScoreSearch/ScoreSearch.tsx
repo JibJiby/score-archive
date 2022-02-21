@@ -4,14 +4,22 @@ import { useDispatch } from 'react-redux'
 import { buttonStyle, inputStyle, logoStyle } from './styles'
 import useInput from '@hooks/useInput'
 import { firestore, storage } from '../../firebase'
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
-import { getDownloadURL, getStorage, ref } from 'firebase/storage'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { getDownloadURL, ref } from 'firebase/storage'
+import { auth } from '../../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
   const dispatch = useDispatch()
+  const [user] = useAuthState(auth)
 
   const onClickSearchBtn = useCallback(async () => {
+    if (!user) {
+      alert('로그인이 필요합니다.')
+      return
+    }
+
     // TODO: 훅으로 빼기 ??
     const scoreCol = collection(firestore, 'score')
     const q = query(scoreCol, where('title', '==', scoreTitle))
@@ -21,6 +29,8 @@ const ScoreSearch = () => {
     } else {
       // TODO: 항상 인덱스 0이 아닐 수 있음
       const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
+      console.log(snapshot.docs[0].data())
+      console.log(snapshot.docs[0].data().title)
       console.log(resultHref)
       dispatch(scoreSlice.actions.setScore('있습니다!!'))
       try {
@@ -83,6 +93,11 @@ const ScoreSearch = () => {
           onChange={onChangeScoreTitle}
           placeholder="악보 제목을 입력해주세요."
           /* TODO: 엔터사용시 button 클릭 이벤트 */
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              document.querySelector('button')?.click()
+            }
+          }}
         />
       </div>
       <button
