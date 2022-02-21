@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+// import { signInWithEmailAndPassword } from 'firebase/auth'
 import useInput from '@hooks/useInput'
 import { auth } from '../../firebase'
 
@@ -9,22 +10,31 @@ const LogIn = () => {
   const [password, onChangepassword] = useInput('')
   const navigate = useNavigate()
 
+  // react firebase hooks
+  // https://github.com/csfrequency/react-firebase-hooks/tree/ab6214822fdc0c280ea39e001db09bc2bbc5264d/auth#usesigninwithemailandpassword
+  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth)
+
   const onLoginClick = useCallback(() => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user
-        console.log('user')
-        console.log(user)
-        navigate('/')
-      })
-      .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        console.log(errorCode, errorMessage)
-        alert('로그인 오류')
-      })
+    // react firebase hooks
+    signInWithEmailAndPassword(email, password)
+
     // dependency 꼭 넣어서 업데이트 확인할 수 있게
   }, [email, password])
+
+  if (error) {
+    // FIXME: 2번 뜸
+    alert('로그인 실패!!')
+
+    //https://stackoverflow.com/questions/42083181/is-it-possible-to-return-empty-in-react-render-function
+    // 하지만 이렇게 하면 또다시 로그인 X
+    // return null
+  }
+
+  if (user) {
+    // 로그인 중이거나 로그인 성공했다면
+    console.log('로그인 중!')
+    navigate('/')
+  }
 
   return (
     <div

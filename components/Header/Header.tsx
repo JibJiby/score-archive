@@ -1,10 +1,21 @@
-import React from 'react'
-import { css } from '@emotion/react'
+import React, { useCallback } from 'react'
 import { headerStyle, LoginButton, Logo } from './styles'
 import { useNavigate } from 'react-router-dom'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../firebase'
+import { signOut } from 'firebase/auth'
 
 const Header = () => {
   const navigate = useNavigate()
+  const [user] = useAuthState(auth)
+
+  const onLogin = useCallback(() => {
+    navigate('/login')
+  }, [])
+
+  const onLogout = useCallback(() => {
+    signOut(auth)
+  }, [auth])
 
   return (
     <header css={headerStyle}>
@@ -16,13 +27,11 @@ const Header = () => {
       >
         로고
       </Logo>
-      <LoginButton
-        onClick={() => {
-          navigate('/login')
-        }}
-      >
-        로그인 버튼
-      </LoginButton>
+      {user ? (
+        <LoginButton onClick={onLogout}>로그아웃</LoginButton>
+      ) : (
+        <LoginButton onClick={onLogin}>로그인</LoginButton>
+      )}
     </header>
   )
 }

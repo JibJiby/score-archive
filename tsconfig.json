@@ -20,7 +20,7 @@
       "@typings/*": ["typings/*"],
       "@styles/*":["styles/*"],
       "@reducers/*": ["reducers/*"],
-      "@store/*": ["store/*"]
+      "@store/*": ["store/*"],
     }
   }
 }
