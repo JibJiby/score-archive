@@ -1,5 +1,5 @@
 import { Button } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 // 클래스
 //https://salgum1114.github.io/reactjs/2019-04-25-back-top-component/
@@ -10,11 +10,17 @@ const BackTop = () => {
   const [visible, setVisible] = useState(false)
   const scrollLimit = useRef(50)
 
+  useEffect(() => {
+    // 이벤트 등록 한번만
+    // FIXME: 마운트 될 때마다 추가됨
+    window.addEventListener('scroll', toggleVisible)
+  }, [])
+
   const toggleVisible = () => {
     //https://stackoverflow.com/questions/2863
     const scrolled = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
-    console.log('scrolled')
-    console.log(scrolled)
+    // console.log('scrolled')
+    // console.log(scrolled)
 
     if (scrolled > scrollLimit.current) {
       setVisible(true)
@@ -29,7 +35,6 @@ const BackTop = () => {
       behavior: 'smooth',
     })
   }
-  window.addEventListener('scroll', toggleVisible)
 
   return (
     <div
