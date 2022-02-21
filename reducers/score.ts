@@ -8,10 +8,12 @@ export type QueryResult = {
 
 export type ScoreState = {
   score: Array<QueryResult> | null
+  result: string[] | null
 }
 
 const initialState: ScoreState = {
   score: null,
+  result: null,
 }
 
 const scoreSlice = createSlice({
@@ -20,6 +22,9 @@ const scoreSlice = createSlice({
   reducers: {
     setScore(state, action) {
       state.score = action.payload
+    },
+    setResult(state, action) {
+      state.result = action.payload
     },
   },
   extraReducers: (builder) => {

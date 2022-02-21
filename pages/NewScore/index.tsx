@@ -9,19 +9,16 @@ import { firestore, storage } from '../../firebase'
 import { ref } from 'firebase/storage'
 import { addDoc, collection } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
+import { QueryResult } from '@reducers/score'
 
 const NewScore = () => {
-  const [newScoreTitle, onChangeScoreTitle, setNewScoreTitle] = useInput('')
+  const [newScoreTitle, onChangeScoreTitle] = useInput('')
   const [fileType, setFileType] = useState('')
   const [selectedFile, setSelectedFile] = useState<File>()
 
-  const [uploadFile, uploading, snapshot, error] = useUploadFile()
+  // TODO: uploading 스피너 적용
+  const [uploadFile] = useUploadFile()
   const navigate = useNavigate()
-
-  // console.log('-'.repeat(50))
-  // console.log(newScoreTitle)
-  // console.log(fileType)
-  // console.log('-'.repeat(50))
 
   const onUpload = useCallback(async () => {
     if (selectedFile) {
@@ -34,18 +31,15 @@ const NewScore = () => {
       })
 
       //firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
-      const newDocRef = await addDoc(collection(firestore, 'score'), {
+      const newFileInfo: QueryResult = {
         title: newScoreTitle,
         href: newFileHref,
         consonant: [convertConsonant(newScoreTitle)],
-      })
+      }
+      const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
 
       // console.log('-'.repeat(50))
-      // console.log({
-      //   title: newScoreTitle,
-      //   href: newFileHref,
-      //   consonant: [convertConsonant(newScoreTitle)],
-      // })
+      // console.log(newFileInfo)
       // console.log('-'.repeat(50))
 
       navigate('/')

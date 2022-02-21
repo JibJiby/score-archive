@@ -8,6 +8,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { auth } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { message } from 'antd'
 
 const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
@@ -16,7 +17,7 @@ const ScoreSearch = () => {
 
   const onClickSearchBtn = useCallback(async () => {
     if (!user) {
-      alert('로그인이 필요합니다.')
+      message.warn('로그인이 필요합니다.')
       return
     }
 
@@ -25,19 +26,20 @@ const ScoreSearch = () => {
     const q = query(scoreCol, where('title', '==', scoreTitle))
     const snapshot = await getDocs(q)
     if (snapshot.empty) {
-      dispatch(scoreSlice.actions.setScore('없습니다'))
+      dispatch(scoreSlice.actions.setResult(null))
     } else {
       // TODO: 항상 인덱스 0이 아닐 수 있음
       const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
       console.log(snapshot.docs[0].data())
       console.log(snapshot.docs[0].data().title)
       console.log(resultHref)
-      dispatch(scoreSlice.actions.setScore('있습니다!!'))
       try {
         const url = await getDownloadURL(ref(storage, resultHref)) // 갑자기 됨 ??
+        dispatch(scoreSlice.actions.setResult([url]))
         console.log(url)
       } catch (e) {
-        alert('url이 유효하지 않습니다.')
+        dispatch(scoreSlice.actions.setResult(null))
+        message.warn('url이 유효하지 않습니다.')
         console.error(e)
       }
     }
