@@ -12,8 +12,11 @@ const BackTop = () => {
 
   useEffect(() => {
     // 이벤트 등록 한번만
-    // FIXME: 마운트 될 때마다 추가됨
     window.addEventListener('scroll', toggleVisible)
+
+    return () => {
+      window.removeEventListener('scroll', toggleVisible)
+    }
   }, [])
 
   const toggleVisible = () => {
