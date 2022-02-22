@@ -4,6 +4,7 @@ export type QueryResult = {
   title: string
   href: string
   consonant: Array<string>
+  noSpaceTitle: string
 }
 
 export type ScoreState = {

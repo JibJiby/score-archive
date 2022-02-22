@@ -42,6 +42,7 @@ const NewScore = () => {
         title: newScoreTitle,
         href: newFileHref,
         consonant: [convertConsonant(newScoreTitle)],
+        noSpaceTitle: newScoreTitle.replace(/\s/g, ''),
       }
       const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
 
@@ -54,7 +55,7 @@ const NewScore = () => {
     } else {
       message.warn('선택된 파일이 없습니다.')
     }
-  }, [navigate, selectedFile])
+  }, [navigate, selectedFile, newScoreTitle])
 
   return (
     <AppLayout>
@@ -118,6 +119,7 @@ const NewScore = () => {
                   style={{ display: 'none' }}
                 />
                 <div>
+                  {/* TODO: 플러스 아이콘 추가 */}
                   <div style={{ marginTop: '8px', fontWeight: 700 }}>업로드</div>
                 </div>
               </span>

@@ -24,9 +24,10 @@ const ScoreSearch = () => {
 
     // TODO: 훅으로 빼기 ??
     const scoreCol = collection(firestore, 'score')
-    const q = query(scoreCol, where('title', '==', scoreTitle))
+    const q = query(scoreCol, where('noSpaceTitle', '==', scoreTitle.replace(/\s/g, '')))
     const snapshot = await getDocs(q)
     if (snapshot.empty) {
+      message.warn('검색 결과가 없습니다!', 0.7)
       dispatch(scoreSlice.actions.setResult(null))
     } else {
       // TODO: 항상 인덱스 0이 아닐 수 있음
