@@ -1,0 +1,40 @@
+[debug] [2022-02-22T13:11:08.673Z] ----------------------------------------------------------------------
+[debug] [2022-02-22T13:11:08.675Z] Command:       /Users/jiby/.nvm/versions/node/v16.13.1/bin/node /Users/jiby/.nvm/versions/node/v16.13.1/bin/firebase deploy
+[debug] [2022-02-22T13:11:08.676Z] CLI Version:   10.1.4
+[debug] [2022-02-22T13:11:08.676Z] Platform:      darwin
+[debug] [2022-02-22T13:11:08.676Z] Node Version:  v16.13.1
+[debug] [2022-02-22T13:11:08.676Z] Time:          Tue Feb 22 2022 22:11:08 GMT+0900 (대한민국 표준시)
+[debug] [2022-02-22T13:11:08.677Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-02-22T13:11:08.762Z] Object ".storage" in "firebase.json" is missing required property: {"missingProperty":"rules"}
+[debug] [2022-02-22T13:11:08.762Z] Field ".storage" in "firebase.json" is possibly invalid: should be array
+[debug] [2022-02-22T13:11:08.762Z] Field ".storage" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2022-02-22T13:11:08.767Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-02-22T13:11:08.768Z] > authorizing via signed-in user (my01sun@gmail.com)
+[debug] [2022-02-22T13:11:08.768Z] [iam] checking project score-archive-12afa for permissions ["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2022-02-22T13:11:08.776Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/score-archive-12afa:testIamPermissions [none]
+[debug] [2022-02-22T13:11:08.777Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/score-archive-12afa:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2022-02-22T13:11:09.535Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/score-archive-12afa:testIamPermissions 200
+[debug] [2022-02-22T13:11:09.535Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/score-archive-12afa:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2022-02-22T13:11:09.536Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/score-archive-12afa [none]
+[debug] [2022-02-22T13:11:09.918Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/score-archive-12afa 200
+[debug] [2022-02-22T13:11:09.919Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/score-archive-12afa {"projectId":"score-archive-12afa","projectNumber":"622242316322","displayName":"score-archive","name":"projects/score-archive-12afa","resources":{"hostingSite":"score-archive-12afa","storageBucket":"score-archive-12afa.appspot.com","locationId":"asia-northeast3"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'score-archive-12afa'...
+[info] 
+[info] i  deploying storage, hosting 
+[debug] [2022-02-22T13:11:09.921Z] >>> [apiv2][query] GET https://appengine.googleapis.com/v1/apps/score-archive-12afa [none]
+[debug] [2022-02-22T13:11:10.223Z] <<< [apiv2][status] GET https://appengine.googleapis.com/v1/apps/score-archive-12afa 200
+[debug] [2022-02-22T13:11:10.223Z] <<< [apiv2][body] GET https://appengine.googleapis.com/v1/apps/score-archive-12afa {"name":"apps/score-archive-12afa","id":"score-archive-12afa","authDomain":"gmail.com","locationId":"asia-northeast3","codeBucket":"staging.score-archive-12afa.appspot.com","servingStatus":"SERVING","defaultHostname":"score-archive-12afa.du.r.appspot.com","defaultBucket":"score-archive-12afa.appspot.com","serviceAccount":"score-archive-12afa@appspot.gserviceaccount.com","gcrDomain":"asia.gcr.io","databaseType":"CLOUD_FIRESTORE","featureSettings":{"splitHealthChecks":true,"useContainerOptimizedOs":true}}
+[debug] [2022-02-22T13:11:10.410Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:371:5)
+    at validateString (node:internal/validators:119:11)
+    at Object.join (node:path:1172:7)
+    at Config.path (/Users/jiby/.nvm/versions/node/v16.13.1/lib/node_modules/firebase-tools/lib/config.js:115:45)
+    at RulesDeploy.addFile (/Users/jiby/.nvm/versions/node/v16.13.1/lib/node_modules/firebase-tools/lib/rulesDeploy.js:33:46)
+    at /Users/jiby/.nvm/versions/node/v16.13.1/lib/node_modules/firebase-tools/lib/deploy/storage/prepare.js:23:21
+    at Array.forEach (<anonymous>)
+    at default_1 (/Users/jiby/.nvm/versions/node/v16.13.1/lib/node_modules/firebase-tools/lib/deploy/storage/prepare.js:19:17)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: An unexpected error has occurred.
