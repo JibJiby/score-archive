@@ -30,13 +30,6 @@ const ScoreSearch = () => {
       message.warn('검색 결과가 없습니다!', 0.7)
       dispatch(scoreSlice.actions.setResult(null))
     } else {
-      // TODO: 항상 인덱스 0이 아닐 수 있음
-      // const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
-      // console.log(snapshot.docs[0].data())
-      // console.log(snapshot.docs[0].data().title)
-      // console.log(resultHref)
-      console.log(snapshot.docs)
-      // TODO: Promise -->
       let resultHrefList
       try {
         //https://stackoverflow.com/questions/54100855/pushing-to-an-array-in-async-function-not-working
