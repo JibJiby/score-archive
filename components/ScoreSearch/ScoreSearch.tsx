@@ -31,14 +31,25 @@ const ScoreSearch = () => {
       dispatch(scoreSlice.actions.setResult(null))
     } else {
       // TODO: 항상 인덱스 0이 아닐 수 있음
-      const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
-      console.log(snapshot.docs[0].data())
-      console.log(snapshot.docs[0].data().title)
-      console.log(resultHref)
+      // const resultHref = snapshot.docs[0].data().href as string // href에 한글은 encodeURI로 인코딩되어 저장됨.
+      // console.log(snapshot.docs[0].data())
+      // console.log(snapshot.docs[0].data().title)
+      // console.log(resultHref)
+      console.log(snapshot.docs)
+      // TODO: Promise -->
+      let resultHrefList
       try {
-        const url = await getDownloadURL(ref(storage, resultHref)) // 갑자기 됨 ??
-        dispatch(scoreSlice.actions.setResult([url]))
-        console.log(url)
+        //https://stackoverflow.com/questions/54100855/pushing-to-an-array-in-async-function-not-working
+        resultHrefList = await Promise.all(
+          snapshot.docs.map(async (v) => {
+            let resultHref = v.data().href
+            const url = await getDownloadURL(ref(storage, resultHref)) // 갑자기 됨 ??
+            return url
+          }),
+        )
+        console.log('resultHrefList')
+        console.log(resultHrefList)
+        dispatch(scoreSlice.actions.setResult(resultHrefList))
       } catch (e) {
         dispatch(scoreSlice.actions.setResult(null))
         message.warn('url이 유효하지 않습니다.')
