@@ -7,8 +7,8 @@ import BackTop from '@components/BackTop'
 const ScoreResultList = () => {
   const result = useSelector<RootState>((state) => state.score.result) as string[]
 
-  //   console.log('result')
-  //   console.log(result)
+  // console.log('result')
+  // console.log(result)
 
   return (
     <>
