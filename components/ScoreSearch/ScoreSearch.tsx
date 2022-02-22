@@ -1,11 +1,7 @@
-import scoreSlice from '@reducers/score'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { buttonStyle, inputStyle, logoStyle } from './styles'
 import useInput from '@hooks/useInput'
-import { firestore, storage } from '../../firebase'
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { getDownloadURL, ref } from 'firebase/storage'
 import { auth } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { message } from 'antd'
@@ -22,7 +18,6 @@ const ScoreSearch = () => {
       message.warn('로그인이 필요합니다.')
       return
     }
-
     dispatch(getScore(scoreTitle))
   }, [scoreTitle])
 

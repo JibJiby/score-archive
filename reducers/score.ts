@@ -9,9 +9,10 @@ export type QueryResult = {
 }
 
 export type ScoreState = {
+  // 새로운 score 등록할 때
   score: Array<QueryResult> | null
-  result: string[] | null
 
+  result: string[] | null
   // 악보 로딩 비동기 상태
   loadScoreLoading: boolean
   loadScoreDone: boolean
