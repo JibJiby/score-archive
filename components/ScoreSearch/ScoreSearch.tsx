@@ -1,5 +1,5 @@
 import scoreSlice from '@reducers/score'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { buttonStyle, inputStyle, logoStyle } from './styles'
 import useInput from '@hooks/useInput'
@@ -14,6 +14,7 @@ const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
   const dispatch = useDispatch()
   const [user] = useAuthState(auth)
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   const onClickSearchBtn = useCallback(async () => {
     if (!user) {
@@ -97,7 +98,9 @@ const ScoreSearch = () => {
           /* TODO: 엔터사용시 button 클릭 이벤트 */
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
-              document.querySelector('button')?.click()
+              if (btnRef.current) {
+                btnRef.current.click()
+              }
             }
           }}
         />
@@ -119,6 +122,7 @@ const ScoreSearch = () => {
         }}
         css={buttonStyle}
         onClick={onClickSearchBtn}
+        ref={btnRef}
       >
         검색
       </button>
