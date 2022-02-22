@@ -9,6 +9,7 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import { auth } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { message } from 'antd'
+import { getScore } from '@actions/score'
 
 const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
@@ -22,33 +23,7 @@ const ScoreSearch = () => {
       return
     }
 
-    // TODO: 훅으로 빼기 ??
-    const scoreCol = collection(firestore, 'score')
-    const q = query(scoreCol, where('noSpaceTitle', '==', scoreTitle.replace(/\s/g, '')))
-    const snapshot = await getDocs(q)
-    if (snapshot.empty) {
-      message.warn('검색 결과가 없습니다!', 0.7)
-      dispatch(scoreSlice.actions.setResult(null))
-    } else {
-      let resultHrefList
-      try {
-        //https://stackoverflow.com/questions/54100855/pushing-to-an-array-in-async-function-not-working
-        resultHrefList = await Promise.all(
-          snapshot.docs.map(async (v) => {
-            let resultHref = v.data().href
-            const url = await getDownloadURL(ref(storage, resultHref)) // 갑자기 됨 ??
-            return url
-          }),
-        )
-        console.log('resultHrefList')
-        console.log(resultHrefList)
-        dispatch(scoreSlice.actions.setResult(resultHrefList))
-      } catch (e) {
-        dispatch(scoreSlice.actions.setResult(null))
-        message.warn('url이 유효하지 않습니다.')
-        console.error(e)
-      }
-    }
+    dispatch(getScore(scoreTitle))
   }, [scoreTitle])
 
   return (

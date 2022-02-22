@@ -21,6 +21,7 @@
       "@styles/*":["styles/*"],
       "@reducers/*": ["reducers/*"],
       "@store/*": ["store/*"],
+      "@actions/*": ["actions/*"]
     }
   }
 }

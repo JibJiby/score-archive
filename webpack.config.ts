@@ -31,6 +31,7 @@ const config: Configuration = {
       '@styles': path.resolve(__dirname, 'styles'),
       '@reducers': path.resolve(__dirname, 'reducers'),
       '@store': path.resolve(__dirname, 'store'),
+      '@actions': path.resolve(__dirname, 'actions'),
     },
   },
   entry: {
