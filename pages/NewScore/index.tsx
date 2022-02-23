@@ -20,6 +20,7 @@ const NewScore = () => {
   const { addScoreDone, addScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
   const { result, loadScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
   const checkBtnRef = useRef<HTMLButtonElement>(null)
+  const titleInputRef = useRef<HTMLInputElement>(null)
 
   // TODO: uploading 스피너 적용
   const [uploadFile] = useUploadFile()
@@ -32,7 +33,8 @@ const NewScore = () => {
   } else if (addScoreError) {
     message.warn('업로드 중 에러가 발생했습니다.')
   } else if (result) {
-    message.info('같은 제목으로 된 파일이 등록되어 있습니다.', 0.8)
+    titleInputRef?.current?.blur()
+    message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
   }
 
   const onUpload = useCallback(async () => {
@@ -76,6 +78,7 @@ const NewScore = () => {
           }}
         >
           <NewScoreInput
+            ref={titleInputRef}
             value={newScoreTitle}
             onChange={onChangeScoreTitle}
             placeholder={'악보 제목을 입력해주세요.'}
