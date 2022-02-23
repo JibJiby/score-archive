@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Layout, Menu } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 import Header from './Header'
 
 const AppLayout: React.FC = ({ children }) => {
-  const navigate = useNavigate()
-
   return (
     <>
       <Header />
