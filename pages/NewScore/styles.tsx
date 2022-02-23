@@ -35,3 +35,8 @@ export const FileUploadWrapper = styled.div`
     height: 100%;
   }
 `
+
+export const Divider = styled.hr`
+  width: 100%;
+  border-top: 3px dashed tomato;
+`

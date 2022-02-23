@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { ScoreState } from '@reducers/score'
 import { FileUploadWrapper, NewScoreInput } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
-import { addScore } from '@actions/score'
+import { addScore, getScore } from '@actions/score'
 import { RootState } from '@reducers/index'
+import { Divider } from './styles'
 
 const NewScore = () => {
   const [fileType, setFileType] = useState('')
@@ -17,6 +18,8 @@ const NewScore = () => {
   const uploadRef = useRef<HTMLInputElement>(null)
   const [newScoreTitle, onChangeScoreTitle] = useInput('')
   const { addScoreDone, addScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
+  const { result, loadScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
+  const checkBtnRef = useRef<HTMLButtonElement>(null)
 
   // TODO: uploading 스피너 적용
   const [uploadFile] = useUploadFile()
@@ -28,6 +31,8 @@ const NewScore = () => {
     message.success('업로드 완료했습니다', 0.5)
   } else if (addScoreError) {
     message.warn('업로드 중 에러가 발생했습니다.')
+  } else if (result) {
+    message.info('같은 제목으로 된 파일이 등록되어 있습니다.', 0.8)
   }
 
   const onUpload = useCallback(async () => {
@@ -37,12 +42,19 @@ const NewScore = () => {
     }
 
     if (selectedFile) {
-      console.log('dispatch addScore')
       dispatch(addScore({ selectedFile, newScoreTitle, fileType, uploadFile }))
     } else {
       message.warn('선택된 파일이 없습니다.')
     }
   }, [navigate, selectedFile, newScoreTitle, fileType, uploadFile])
+
+  const onCheckClick = useCallback(() => {
+    if (newScoreTitle === '') {
+      message.warn('제목을 먼저 입력해주세요.')
+      return
+    }
+    dispatch(getScore(newScoreTitle))
+  }, [newScoreTitle])
 
   return (
     <AppLayout>
@@ -67,7 +79,46 @@ const NewScore = () => {
             value={newScoreTitle}
             onChange={onChangeScoreTitle}
             placeholder={'악보 제목을 입력해주세요.'}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                if (checkBtnRef.current) checkBtnRef.current.click()
+              }
+            }}
           />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <button onClick={onCheckClick} ref={checkBtnRef}>
+            확인
+          </button>
+        </div>
+        <div
+          style={{
+            display: result ? 'flex' : 'none',
+            alignItems: 'center',
+            flexDirection: 'column',
+            padding: '20px',
+          }}
+        >
+          {result && (
+            <>
+              {result?.map((v) => (
+                <Image
+                  src={v}
+                  preview={false}
+                  key={v}
+                  style={{
+                    margin: '20px auto',
+                  }}
+                />
+              ))}
+            </>
+          )}
+          <Divider />
         </div>
         <div
           style={{
