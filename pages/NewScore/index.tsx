@@ -1,26 +1,34 @@
 import React, { useCallback, useRef, useState } from 'react'
 import AppLayout from '@components/AppLayout'
 import useInput from '@hooks/useInput'
-import convertConsonant from '@utils/convertContanent'
 import { Image, message } from 'antd'
 import { useUploadFile } from 'react-firebase-hooks/storage'
-import { firestore, storage } from '../../firebase'
-import { ref } from 'firebase/storage'
-import { addDoc, collection } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
-import { QueryResult } from '@reducers/score'
+import { ScoreState } from '@reducers/score'
 import { FileUploadWrapper, NewScoreInput } from './styles'
+import { useDispatch, useSelector } from 'react-redux'
+import { addScore } from '@actions/score'
+import { RootState } from '@reducers/index'
 
 const NewScore = () => {
-  const [newScoreTitle, onChangeScoreTitle] = useInput('')
   const [fileType, setFileType] = useState('')
   const [selectedFile, setSelectedFile] = useState<File>()
   const [localFileUrl, setLocalFileUrl] = useState('')
   const uploadRef = useRef<HTMLInputElement>(null)
+  const [newScoreTitle, onChangeScoreTitle] = useInput('')
+  const { addScoreDone, addScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
 
   // TODO: uploading 스피너 적용
   const [uploadFile] = useUploadFile()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  if (addScoreDone) {
+    navigate('/')
+    message.success('업로드 완료했습니다', 0.5)
+  } else if (addScoreError) {
+    message.warn('업로드 중 에러가 발생했습니다.')
+  }
 
   const onUpload = useCallback(async () => {
     if (newScoreTitle === '') {
@@ -29,33 +37,12 @@ const NewScore = () => {
     }
 
     if (selectedFile) {
-      // storage
-      const encodedName = encodeURI(newScoreTitle)
-      const newFileHref = `images/${encodedName}.${fileType.split('/')[1]}`
-      const newFileRef = ref(storage, newFileHref)
-      await uploadFile(newFileRef, selectedFile, {
-        contentType: fileType,
-      })
-
-      //firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
-      const newFileInfo: QueryResult = {
-        title: newScoreTitle,
-        href: newFileHref,
-        consonant: [convertConsonant(newScoreTitle)],
-        noSpaceTitle: newScoreTitle.replace(/\s/g, ''),
-      }
-      const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
-
-      // console.log('-'.repeat(50))
-      // console.log(newFileInfo)
-      // console.log('-'.repeat(50))
-
-      navigate('/')
-      message.success('업로드 완료했습니다', 0.5)
+      console.log('dispatch addScore')
+      dispatch(addScore({ selectedFile, newScoreTitle, fileType, uploadFile }))
     } else {
       message.warn('선택된 파일이 없습니다.')
     }
-  }, [navigate, selectedFile, newScoreTitle])
+  }, [navigate, selectedFile, newScoreTitle, fileType, uploadFile])
 
   return (
     <AppLayout>

@@ -1,14 +1,13 @@
+import { QueryResult } from '@reducers/score'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import convertConsonant from '@utils/convertContanent'
 import { message } from 'antd'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { firestore, storage } from '../firebase'
 
 export const getScore = createAsyncThunk('score/getScore', async (scoreTitle: string, thunkAPI) => {
   try {
-    // data <- scoreTitle
-    // const scoreTitle = scoreTitle as unknown as string
-
     const scoreCol = collection(firestore, 'score')
     const q = query(scoreCol, where('noSpaceTitle', '==', scoreTitle.replace(/\s/g, '')))
     const snapshot = await getDocs(q)
@@ -36,3 +35,35 @@ export const getScore = createAsyncThunk('score/getScore', async (scoreTitle: st
     return thunkAPI.rejectWithValue(error)
   }
 })
+
+export const addScore = createAsyncThunk(
+  'score/addScore',
+  async (
+    data: {
+      selectedFile: File
+      newScoreTitle: string
+      fileType: string
+      // TODO: 타입 올바르게 넣기
+      uploadFile: any
+    },
+    ThunkAPI,
+  ) => {
+    const { newScoreTitle, fileType, selectedFile, uploadFile } = data
+
+    const encodedName = encodeURI(newScoreTitle)
+    const newFileHref = `images/${encodedName}.${fileType.split('/')[1]}`
+    const newFileRef = ref(storage, newFileHref)
+    await uploadFile(newFileRef, selectedFile, {
+      contentType: fileType,
+    })
+
+    //firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
+    const newFileInfo: QueryResult = {
+      title: newScoreTitle,
+      href: newFileHref,
+      consonant: [convertConsonant(newScoreTitle)],
+      noSpaceTitle: newScoreTitle.replace(/\s/g, ''),
+    }
+    const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
+  },
+)
