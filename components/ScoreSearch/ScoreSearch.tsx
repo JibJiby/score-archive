@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { buttonStyle, inputStyle, logoStyle } from './styles'
 import useInput from '@hooks/useInput'
 import { auth } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { message } from 'antd'
 import { getScore } from '@actions/score'
+import { RootState } from '@reducers/index'
+import { ScoreState } from '@reducers/score'
 
 const ScoreSearch = () => {
   const [scoreTitle, onChangeScoreTitle] = useInput('')
   const dispatch = useDispatch()
   const [user] = useAuthState(auth)
   const btnRef = useRef<HTMLButtonElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { result } = useSelector<RootState, ScoreState>((state) => state.score)
 
   const onClickSearchBtn = useCallback(async () => {
     if (!user) {
@@ -20,6 +24,11 @@ const ScoreSearch = () => {
     }
     dispatch(getScore(scoreTitle))
   }, [scoreTitle])
+
+  if (result) {
+    // 검색 결과가 있는 경우 키보드 사라지게 하기
+    inputRef?.current?.blur()
+  }
 
   return (
     <div
@@ -66,6 +75,7 @@ const ScoreSearch = () => {
             padding: '10px',
             borderRadius: '6px',
           }}
+          ref={inputRef}
           css={inputStyle}
           value={scoreTitle}
           onChange={onChangeScoreTitle}
