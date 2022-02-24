@@ -8,6 +8,7 @@ export const NewScoreInput = styled.input`
   /* TODO: ScoreSearch 스타일 일반화 */
   margin: 50px auto;
   width: 60%;
+  min-width: 300px;
   height: 3rem;
   outline: none;
   border: 0px;

@@ -104,27 +104,37 @@ const NewScore = () => {
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundColor: '#adb5bd',
-            margin: '0 180px',
-            borderRadius: '4px',
-            minHeight: '60px',
-            userSelect: 'none',
+            justifyContent: 'center',
           }}
         >
-          <span
+          <div
             style={{
-              fontWeight: 600,
-              paddingBottom: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundColor: '#adb5bd',
+              // 너비
+              width: '45%',
+              minWidth: '250px',
+              borderRadius: '4px',
+              minHeight: '60px',
+              userSelect: 'none',
             }}
           >
-            이미 등록된 지 확인해주세요!
-          </span>
-          <button onClick={onCheckClick} ref={checkBtnRef}>
-            확인
-          </button>
+            <span
+              style={{
+                fontWeight: 600,
+                paddingBottom: '10px',
+              }}
+            >
+              이미 등록된 지 확인해주세요!
+            </span>
+            <button onClick={onCheckClick} ref={checkBtnRef} style={{ margin: '10px auto' }}>
+              확인
+            </button>
+          </div>
         </div>
+
         <div
           style={{
             display: result ? 'flex' : 'none',
