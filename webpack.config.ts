@@ -1,5 +1,6 @@
 import path from 'path'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -82,6 +83,9 @@ const config: Configuration = {
     }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: isDevelopment ? 'development' : 'production',
+    }),
+    new HtmlWebpackPlugin({
+      template: './index.html',
     }),
     // .env 적용하기 위해
     new Dotenv(),

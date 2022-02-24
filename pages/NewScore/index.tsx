@@ -15,10 +15,10 @@ const NewScore = () => {
   const [fileType, setFileType] = useState('')
   const [selectedFile, setSelectedFile] = useState<File>()
   const [localFileUrl, setLocalFileUrl] = useState('')
-  const uploadRef = useRef<HTMLInputElement>(null)
   const [newScoreTitle, onChangeScoreTitle] = useInput('')
   const { addScoreDone, addScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
   const { result, loadScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
+  const uploadRef = useRef<HTMLInputElement>(null)
   const checkBtnRef = useRef<HTMLButtonElement>(null)
   const titleInputRef = useRef<HTMLInputElement>(null)
 
@@ -41,6 +41,13 @@ const NewScore = () => {
       message.warn('업로드 중 에러가 발생했습니다.')
     }
   }, [addScoreDone])
+
+  useEffect(() => {
+    if (!selectedFile && uploadRef.current) {
+      // 여기서 uploadRef 초기화
+      uploadRef.current.value = ''
+    }
+  }, [selectedFile, uploadRef])
 
   const onUpload = useCallback(async () => {
     if (newScoreTitle === '') {
@@ -86,7 +93,7 @@ const NewScore = () => {
             ref={titleInputRef}
             value={newScoreTitle}
             onChange={onChangeScoreTitle}
-            placeholder={'악보 제목을 입력해주세요.'}
+            placeholder={'생성할 악보 제목을 입력해주세요.'}
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 if (checkBtnRef.current) checkBtnRef.current.click()
@@ -97,9 +104,23 @@ const NewScore = () => {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: '#adb5bd',
+            margin: '0 180px',
+            borderRadius: '4px',
+            minHeight: '60px',
+            userSelect: 'none',
           }}
         >
+          <span
+            style={{
+              fontWeight: 600,
+              paddingBottom: '10px',
+            }}
+          >
+            이미 등록된 지 확인해주세요!
+          </span>
           <button onClick={onCheckClick} ref={checkBtnRef}>
             확인
           </button>
@@ -172,6 +193,26 @@ const NewScore = () => {
             </FileUploadWrapper>
           )}
         </div>
+        {selectedFile && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <button
+              onClick={() => {
+                if (selectedFile) {
+                  setFileType('')
+                  setSelectedFile(undefined)
+                  setLocalFileUrl('')
+                }
+              }}
+            >
+              초기화
+            </button>
+          </div>
+        )}
         <div
           style={{
             display: 'flex',
