@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import useInput from '@hooks/useInput'
@@ -17,21 +17,26 @@ const LogIn = () => {
 
   const onLoginClick = useCallback(async () => {
     // react firebase hooks
-    try {
-      const result = await signInWithEmailAndPassword(email, password)
-      console.log(result)
-      message.success('로그인 성공', 0.4)
-    } catch (e) {
-      console.error(e)
-    }
-
+    // signInWithEmailAndPassword 로그인 성공 유무에 상관없이 undefined 반환
+    await signInWithEmailAndPassword(email, password)
     // dependency 꼭 넣어서 업데이트 확인할 수 있게
   }, [email, password])
 
-  if (user) {
-    // 로그인 중이거나 로그인 성공했다면
-    navigate('/')
-  }
+  useEffect(() => {
+    if (user) {
+      // 로그인 성공했다면
+      navigate('/')
+      message.success('로그인 성공', 0.4)
+    }
+  }, [user])
+
+  useEffect(() => {
+    // TODO: status 코드 별 분기 처리
+    if (error) {
+      // error 초기값인 undefined가 아니라면
+      message.warn('로그인 실패하였습니다.', 0.8)
+    }
+  }, [error])
 
   return (
     <div
