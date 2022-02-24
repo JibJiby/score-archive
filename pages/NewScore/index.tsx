@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AppLayout from '@components/AppLayout'
 import useInput from '@hooks/useInput'
 import { Image, message } from 'antd'
@@ -22,20 +22,25 @@ const NewScore = () => {
   const checkBtnRef = useRef<HTMLButtonElement>(null)
   const titleInputRef = useRef<HTMLInputElement>(null)
 
-  // TODO: uploading 스피너 적용
   const [uploadFile] = useUploadFile()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  if (addScoreDone) {
-    navigate('/')
-    message.success('업로드 완료했습니다', 0.5)
-  } else if (addScoreError) {
-    message.warn('업로드 중 에러가 발생했습니다.')
-  } else if (result) {
-    titleInputRef?.current?.blur()
-    message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
-  }
+  useEffect(() => {
+    if (result) {
+      titleInputRef?.current?.blur()
+      message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
+    }
+  }, [result])
+
+  useEffect(() => {
+    if (addScoreDone) {
+      navigate('/')
+      message.success('업로드 완료했습니다', 0.5)
+    } else if (addScoreError) {
+      message.warn('업로드 중 에러가 발생했습니다.')
+    }
+  }, [addScoreDone])
 
   const onUpload = useCallback(async () => {
     if (newScoreTitle === '') {
