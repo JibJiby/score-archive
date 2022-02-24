@@ -25,10 +25,12 @@ const ScoreSearch = () => {
     dispatch(getScore(scoreTitle))
   }, [scoreTitle])
 
-  if (result) {
-    // 검색 결과가 있는 경우 키보드 사라지게 하기
-    inputRef?.current?.blur()
-  }
+  useEffect(() => {
+    if (result) {
+      // 검색 결과가 있는 경우 키보드 사라지게 하기
+      inputRef?.current?.blur()
+    }
+  }, [result])
 
   return (
     <div
