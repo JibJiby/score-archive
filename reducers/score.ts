@@ -39,14 +39,7 @@ const initialState: ScoreState = {
 const scoreSlice = createSlice({
   name: 'score',
   initialState,
-  reducers: {
-    setScore(state, action) {
-      state.score = action.payload
-    },
-    setResult(state, action) {
-      state.result = action.payload
-    },
-  },
+  reducers: {},
   extraReducers: (builder) =>
     builder
       //getScore
