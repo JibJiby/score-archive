@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { addScore, getScore } from '@actions/score'
+import { addSecondScore } from '../actions/score'
 
 export type QueryResult = {
   title: string
@@ -21,6 +22,10 @@ export type ScoreState = {
   addScoreLoading: boolean
   addScoreDone: boolean
   addScoreError: string | null | undefined
+  //
+  // addSecondScoreLoading: boolean
+  // addSecondScoreDone: boolean
+  // addSecondScoreError: string | null | undefined
 }
 
 const initialState: ScoreState = {
@@ -34,6 +39,10 @@ const initialState: ScoreState = {
   addScoreLoading: false,
   addScoreDone: false,
   addScoreError: null,
+  //
+  // addSecondScoreLoading: false,
+  // addSecondScoreDone: false,
+  // addSecondScoreError: null,
 }
 
 const scoreSlice = createSlice({
@@ -69,6 +78,21 @@ const scoreSlice = createSlice({
         // 파일 추가는 리스트를 전역 상태에 저장할 필요가 없지.
       })
       .addCase(addScore.rejected, (state, action) => {
+        state.addScoreLoading = false
+        state.addScoreError = action.error.message
+      })
+      // second Score (등록 + 추가 제목도)
+      // 상태관리 간단하게 하기 위해 똑같은 state를 변경하는 걸로
+      .addCase(addSecondScore.pending, (state) => {
+        state.addScoreLoading = true
+        state.addScoreDone = false
+        state.addScoreError = null
+      })
+      .addCase(addSecondScore.fulfilled, (state, action) => {
+        state.addScoreLoading = false
+        state.addScoreDone = true
+      })
+      .addCase(addSecondScore.rejected, (state, action) => {
         state.addScoreLoading = false
         state.addScoreError = action.error.message
       }),

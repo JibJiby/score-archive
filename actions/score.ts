@@ -67,3 +67,47 @@ export const addScore = createAsyncThunk(
     const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
   },
 )
+
+// 첫등록 + 추가제목도
+export const addSecondScore = createAsyncThunk(
+  'score/addSecondScore',
+  async (
+    data: {
+      selectedFile: File
+      newScoreTitle: string
+      // 추가한 제목
+      newSecondScoreTitle: string
+      fileType: string
+      // TODO: 타입 올바르게 넣기
+      uploadFile: any
+    },
+    ThunkAPI,
+  ) => {
+    const { newScoreTitle, newSecondScoreTitle, fileType, selectedFile, uploadFile } = data
+
+    const encodedName = encodeURI(newScoreTitle)
+    const newFileHref = `images/${encodedName}.${fileType.split('/')[1]}`
+    const newFileRef = ref(storage, newFileHref)
+    await uploadFile(newFileRef, selectedFile, {
+      contentType: fileType,
+    })
+    // 성공하면 계속 진행
+
+    const newFileInfo: QueryResult = {
+      title: newScoreTitle,
+      href: newFileHref,
+      consonant: [convertConsonant(newScoreTitle)],
+      noSpaceTitle: newScoreTitle.replace(/\s/g, ''),
+    }
+    const newDocRef = await addDoc(collection(firestore, 'score'), newFileInfo)
+
+    // 두번째 (우선 첫번째 성공시키고)
+    const newSecondInfo: QueryResult = {
+      title: newSecondScoreTitle,
+      href: newFileHref, // 여기 이미지 주소만 동일하게
+      consonant: [convertConsonant(newSecondScoreTitle)],
+      noSpaceTitle: newSecondScoreTitle.replace(/\s/g, ''),
+    }
+    const newSecondDocRef = await addDoc(collection(firestore, 'score'), newSecondInfo)
+  },
+)

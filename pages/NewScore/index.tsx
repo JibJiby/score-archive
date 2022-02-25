@@ -5,9 +5,9 @@ import { Image, message } from 'antd'
 import { useUploadFile } from 'react-firebase-hooks/storage'
 import { useNavigate } from 'react-router-dom'
 import { ScoreState } from '@reducers/score'
-import { FileUploadWrapper, NewScoreInput } from './styles'
+import { FileUploadWrapper, NewScoreInput, SecondTitleInput } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
-import { addScore, getScore } from '@actions/score'
+import { addScore, getScore, addSecondScore } from '@actions/score'
 import { RootState } from '@reducers/index'
 import { Divider } from './styles'
 
@@ -16,6 +16,7 @@ const NewScore = () => {
   const [selectedFile, setSelectedFile] = useState<File>()
   const [localFileUrl, setLocalFileUrl] = useState('')
   const [newScoreTitle, onChangeScoreTitle] = useInput('')
+  const [newSecondScoreTitle, onChangeSecondScoreTitle, setNewSecondScoreTitle] = useInput('')
   const { addScoreDone, addScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
   const { result, loadScoreError } = useSelector<RootState, ScoreState>((state) => state.score)
   const uploadRef = useRef<HTMLInputElement>(null)
@@ -56,7 +57,12 @@ const NewScore = () => {
     }
 
     if (selectedFile) {
-      dispatch(addScore({ selectedFile, newScoreTitle, fileType, uploadFile }))
+      if (newSecondScoreTitle) {
+        dispatch(addSecondScore({ selectedFile, newSecondScoreTitle, newScoreTitle, fileType, uploadFile }))
+      } else {
+        // 추가 제목 없을 때
+        dispatch(addScore({ selectedFile, newScoreTitle, fileType, uploadFile }))
+      }
     } else {
       message.warn('선택된 파일이 없습니다.')
     }
@@ -216,6 +222,8 @@ const NewScore = () => {
                   setFileType('')
                   setSelectedFile(undefined)
                   setLocalFileUrl('')
+                  // 두번째 제목도 초기화
+                  setNewSecondScoreTitle('')
                 }
               }}
             >
@@ -223,6 +231,22 @@ const NewScore = () => {
             </button>
           </div>
         )}
+        <div
+          style={{
+            marginTop: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {selectedFile && (
+            <SecondTitleInput
+              value={newSecondScoreTitle}
+              onChange={onChangeSecondScoreTitle}
+              placeholder="추가할 제목을 입력해주세요."
+            />
+          )}
+        </div>
         <div
           style={{
             display: 'flex',

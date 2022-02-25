@@ -41,3 +41,26 @@ export const Divider = styled.hr`
   width: 100%;
   border-top: 3px dashed tomato;
 `
+
+export const StatusColor = styled.div<{ status: string }>`
+  display: inline-block;
+  background-color: ${(props) => (props.status === 'green' ? '#51cf66' : '#fa5252')};
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+`
+
+export const SecondTitleInput = styled.input`
+  /* https://codeconvey.com/css-input-border-animation/ */
+  border: 0;
+  min-width: 180px;
+  padding: 7px 0;
+  border-bottom: 2px solid black;
+  background-color: transparent;
+  outline: none;
+
+  &:focus {
+    border-bottom: 2px solid tomato;
+    transition: border-bottom 0.3s;
+  }
+`
