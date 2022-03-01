@@ -16,6 +16,9 @@ interface Configuration extends WebpackConfiguration {
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
+//  파이어 베이스
+// https://firebase.google.com/docs/web/module-bundling
+
 const config: Configuration = {
   name: 'score-archive',
   mode: isDevelopment ? 'development' : 'production',
@@ -36,6 +39,7 @@ const config: Configuration = {
     },
   },
   entry: {
+    // key 값이 output의 [name]으로 들어감
     app: './client',
   },
   module: {
@@ -84,16 +88,20 @@ const config: Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: isDevelopment ? 'development' : 'production',
     }),
-    new HtmlWebpackPlugin({
-      template: './index.html',
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: './index.html',
+    // }),
     // .env 적용하기 위해
     new Dotenv(),
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    // 참고
+    // http://daplus.net/javascript-webpack%EC%9D%98-publicpath%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%84%ED%95%A9%EB%8B%88%EA%B9%8C/
+    // https://firebase.google.com/docs/web/module-bundling
+    path: path.join(__dirname, 'dist'), // 모든 출력 파일을 저장할 경로 (절대 경로)
     filename: '[name].js', // entry의 app 값이 [name]으로 들어감.
-    publicPath: '/dist/',
+    publicPath: '/dist/', // 번들 파일 업로드.  Dev 서버일 때는 index.html의 "/dist"/app.js 와 동일해야함. 직접 html 열때는 ./dist/app.js 로.
+    clean: true,
   },
   devServer: {
     historyApiFallback: true, // react router할 때 필요한 설정. 사기쳐주는 설정. spa이기 때문에 'localhost/login 이나 /signup 모두 localhost/로 간다. 이것밖에 없으니까. 있는 것처럼 행동하는게 이 기능.
@@ -115,7 +123,7 @@ if (isDevelopment && config.plugins) {
   config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true }))
 }
 if (!isDevelopment && config.plugins) {
-  config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }))
+  config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true })) // 압축
   config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }))
 }
 
