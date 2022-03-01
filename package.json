@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack serve --env development",
-    "build": "cross-env NODE_ENV=production TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack "
+    "build": "cross-env NODE_ENV=production TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack ",
+    "deploy": "rimraf public/* && npm run build && cp -rf dist index.html public/ && firebase deploy --only hosting"
   },
   "keywords": [],
   "author": "",
@@ -56,6 +57,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.1",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5",
     "webpack": "^5.69.1",
