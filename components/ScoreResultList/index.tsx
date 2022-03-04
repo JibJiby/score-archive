@@ -4,15 +4,13 @@ import { Image, Spin } from 'antd'
 import { useSelector } from 'react-redux'
 import BackTop from '@components/BackTop'
 import Spinner from '@components/Spinner'
+import MyImage from '@components/MyImage'
 
 const ScoreResultList = () => {
   // https://stackoverflow.com/questions/57472105/react-redux-useselector-typescript-type-for-state
   // unknown 문제
   const result = useSelector<RootState, string[] | null>((state) => state.score.result)
   const loadScoreLoading = useSelector<RootState, boolean>((state) => state.score.loadScoreLoading)
-
-  // console.log('result')
-  // console.log(result)
 
   return (
     <>
@@ -31,14 +29,7 @@ const ScoreResultList = () => {
         ) : (
           <>
             {result?.map((v) => (
-              <Image
-                src={v}
-                preview={false}
-                key={v}
-                style={{
-                  margin: '20px auto',
-                }}
-              />
+              <MyImage src={v} key={v} />
             ))}
           </>
         )}

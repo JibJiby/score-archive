@@ -9,11 +9,18 @@ export type QueryResult = {
   noSpaceTitle: string
 }
 
+type BasketItem = {
+  id: string | undefined // 원시값이 제대로 할당되지 않을 경우 undefined
+  href: string
+}
+
 export type ScoreState = {
   // 새로운 score 등록할 때
   score: Array<QueryResult> | null
 
   result: string[] | null
+  basket: BasketItem[] | null // 악보 체크된 것들 장바구니
+
   // 악보 로딩 비동기 상태
   loadScoreLoading: boolean
   loadScoreDone: boolean
@@ -30,7 +37,10 @@ export type ScoreState = {
 
 const initialState: ScoreState = {
   score: null,
+
   result: null,
+  basket: null,
+
   // 악보 로딩 비동기 상태
   loadScoreLoading: false,
   loadScoreDone: false,
@@ -48,7 +58,38 @@ const initialState: ScoreState = {
 const scoreSlice = createSlice({
   name: 'score',
   initialState,
-  reducers: {},
+  reducers: {
+    resetResult(state) {
+      state.result = null
+    },
+    resetBasket(state) {
+      state.basket = null
+    },
+    addBasket(state, action) {
+      if (!state.basket) {
+        // 빈 경우
+        state.basket = []
+      }
+      const count = state.basket.length.toString()
+      const item = { id: count, href: action.payload }
+      // console.log('item')
+      // console.log(item)
+      // state.basket?.unshift({ id: count, href: action.payload }) // 가장 앞으로 추가.
+      state.basket.push(item)
+    },
+    removeBasket(state, action) {
+      if (!state.basket) {
+        // 빈 경우
+        state.basket = []
+      } else {
+        // mutate   2번째 인자 : 갯수
+        state.basket.splice(
+          state.basket.findIndex((v) => v.href === action.payload),
+          1,
+        )
+      }
+    },
+  },
   extraReducers: (builder) =>
     builder
       //getScore

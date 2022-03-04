@@ -4,7 +4,7 @@ import useInput from '@hooks/useInput'
 import { Image, message } from 'antd'
 import { useUploadFile } from 'react-firebase-hooks/storage'
 import { useNavigate } from 'react-router-dom'
-import { ScoreState } from '@reducers/score'
+import scoreSlice, { ScoreState } from '@reducers/score'
 import { FileUploadWrapper, NewScoreInput, SecondTitleInput } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { addScore, getScore, addSecondScore } from '@actions/score'
@@ -28,11 +28,19 @@ const NewScore = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (result) {
+    if (!!result) {
+      // 이미 result에 값이 있다면
+      // ex)  검색하다가 '추가'로 넘어오면
+      dispatch(scoreSlice.actions.resetResult())
+    }
+  }, [])
+
+  useEffect(() => {
+    if (newScoreTitle && result) {
       titleInputRef?.current?.blur()
       message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
     }
-  }, [result])
+  }, [newScoreTitle, result])
 
   useEffect(() => {
     if (addScoreDone) {
