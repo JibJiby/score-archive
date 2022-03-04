@@ -21,7 +21,8 @@
       "@styles/*":["styles/*"],
       "@reducers/*": ["reducers/*"],
       "@store/*": ["store/*"],
-      "@actions/*": ["actions/*"]
+      "@actions/*": ["actions/*"],
+      "@assets/*": ["assets/*"]
     }
   }
 }

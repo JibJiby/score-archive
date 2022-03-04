@@ -1,6 +1,5 @@
 import path from 'path'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
@@ -36,6 +35,7 @@ const config: Configuration = {
       '@reducers': path.resolve(__dirname, 'reducers'),
       '@store': path.resolve(__dirname, 'store'),
       '@actions': path.resolve(__dirname, 'actions'),
+      '@assets': path.resolve(__dirname, 'assets'),
     },
   },
   entry: {
@@ -75,6 +75,10 @@ const config: Configuration = {
       {
         test: /\.css?$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
       },
     ],
   },

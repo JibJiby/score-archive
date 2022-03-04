@@ -5,6 +5,7 @@ import loadable from '@loadable/component'
 const Home = loadable(() => import('@pages/Home'))
 const LogIn = loadable(() => import('@pages/LogIn'))
 const NewScore = loadable(() => import('@pages/NewScore'))
+const Download = loadable(() => import('@pages/Download'))
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LogIn />} />
       <Route path="/newscore" element={<NewScore />} />
+      <Route path="/download" element={<Download />} />
     </Routes>
   )
 }
