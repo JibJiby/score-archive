@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth'
+import logoImg from '@assets/logo.png'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ const Header = () => {
           navigate('/')
         }}
       >
-        로고
+        <img src={logoImg} style={{ width: '100%' }} />
       </Logo>
       {user ? (
         <div css={userButtonWrapperStyle}>

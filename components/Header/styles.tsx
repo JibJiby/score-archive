@@ -14,7 +14,7 @@ export const headerStyle = css`
 `
 
 export const Logo = styled.div`
-  background-color: tomato;
+  /* background-color: tomato; */
   display: flex;
   justify-content: center;
   align-items: center;

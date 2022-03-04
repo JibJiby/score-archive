@@ -5,6 +5,7 @@ import useInput from '@hooks/useInput'
 import { auth } from '../../firebase'
 import { inputWrapperStyle } from './styles'
 import { message } from 'antd'
+import logoImg from '@assets/logo.png'
 
 const LogIn = () => {
   const [email, onChangeEmail] = useInput('')
@@ -48,11 +49,11 @@ const LogIn = () => {
         alignItems: 'center',
         flexDirection: 'column',
         userSelect: 'none',
+        paddingTop: '30px',
       }}
     >
       <div
         style={{
-          backgroundColor: 'tomato',
           display: 'inline',
           width: '300px',
           height: '60px',
@@ -63,7 +64,7 @@ const LogIn = () => {
           navigate('/')
         }}
       >
-        로고
+        <img src={logoImg} style={{ width: '100%' }} />
       </div>
       <div className="input-wrapper" css={inputWrapperStyle}>
         <div
