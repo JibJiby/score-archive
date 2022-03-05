@@ -1,13 +1,14 @@
 import { RootState } from '@reducers/index'
-import { ScoreState } from '@reducers/score'
+import scoreSlice, { ScoreState } from '@reducers/score'
 import { Image } from 'antd'
 import JSZip from 'jszip'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const Download = () => {
   const { basket } = useSelector<RootState, ScoreState>((state) => state.score)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   return (
@@ -52,14 +53,31 @@ const Download = () => {
         <>
           {basket ? (
             basket?.map((v) => (
-              <Image
-                src={v.href}
-                preview={false}
-                key={v.href}
+              <div
                 style={{
-                  margin: '20px auto',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  margin: '10px auto',
                 }}
-              />
+              >
+                <Image
+                  src={v.href}
+                  preview={false}
+                  key={v.href}
+                  style={{
+                    margin: '20px auto',
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    dispatch(scoreSlice.actions.removeBasket(v.href))
+                  }}
+                >
+                  빼기
+                </button>
+              </div>
             ))
           ) : (
             <div style={{ userSelect: 'none' }}>

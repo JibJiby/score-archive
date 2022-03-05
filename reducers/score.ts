@@ -87,6 +87,8 @@ const scoreSlice = createSlice({
           state.basket.findIndex((v) => v.href === action.payload),
           1,
         )
+        // 하나만 있던 것을 없애면 [] 빈 배열로 됨. --> truely 로 판단되어서 null로 다시 초기화
+        if (state.basket.length === 0) state.basket = null
       }
     },
   },
