@@ -2,8 +2,10 @@ import { combineReducers } from '@reduxjs/toolkit'
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/es/storage/session'
 import scoreSlice from './score'
+import userSlice from './user'
 
 const rootReducer = combineReducers({
+  user: userSlice.reducer,
   score: scoreSlice.reducer,
 })
 

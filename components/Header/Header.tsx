@@ -5,20 +5,28 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import logoImg from '@assets/logo.png'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import scoreSlice from '@reducers/score'
+import userSlice, { UserState } from '@reducers/user'
+import { RootState } from '@reducers/index'
 
 const Header = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [user] = useAuthState(auth)
+  const me = useSelector<RootState, UserState>((state) => state.user.me) // redux-persist
 
   const onLogin = useCallback(() => {
     navigate('/login')
   }, [])
 
   const onLogout = useCallback(() => {
-    signOut(auth)
+    try {
+      signOut(auth)
+      userSlice.actions.logout()
+    } catch (e) {
+      console.error('로그아웃 중 에러.')
+    }
   }, [auth])
 
   return (
@@ -31,7 +39,8 @@ const Header = () => {
       >
         <img src={logoImg} style={{ width: '100%' }} />
       </Logo>
-      {user ? (
+      {/* {user ? ( */}
+      {me ? (
         <div css={userButtonWrapperStyle}>
           <NewScoreButton
             onClick={() => {

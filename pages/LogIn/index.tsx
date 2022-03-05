@@ -6,11 +6,14 @@ import { auth } from '../../firebase'
 import { inputWrapperStyle } from './styles'
 import { message } from 'antd'
 import logoImg from '@assets/logo.png'
+import { useDispatch } from 'react-redux'
+import userSlice from '@reducers/user'
 
 const LogIn = () => {
   const [email, onChangeEmail] = useInput('')
   const [password, onChangepassword] = useInput('')
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // react firebase hooks
   // https://github.com/csfrequency/react-firebase-hooks/tree/ab6214822fdc0c280ea39e001db09bc2bbc5264d/auth#usesigninwithemailandpassword
@@ -27,6 +30,7 @@ const LogIn = () => {
     if (user) {
       // 로그인 성공했다면
       navigate('/')
+      dispatch(userSlice.actions.login(user)) // redux-persist를 위해 slice 추가함.
       message.success('로그인 성공', 0.4)
     }
   }, [user])
