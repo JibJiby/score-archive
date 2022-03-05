@@ -25,7 +25,21 @@ const Download = () => {
       >
         {basket && (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px' }}>
-            <button
+            <div
+              style={{
+                backgroundColor: '#0c243b',
+                minWidth: '150px',
+                width: '100%',
+                display: 'block',
+                borderRadius: '6px',
+                border: 'solid 1px rgba(0,0,0,.15)',
+                cursor: 'pointer',
+                padding: '20px auto',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                textAlign: 'center',
+              }}
               onClick={() => {
                 const zip = new JSZip()
 
@@ -46,7 +60,7 @@ const Download = () => {
               }}
             >
               다운로드
-            </button>
+            </div>
           </div>
         )}
 
@@ -80,8 +94,8 @@ const Download = () => {
               </div>
             ))
           ) : (
-            <div style={{ userSelect: 'none' }}>
-              아직 없습니다.
+            <div style={{ userSelect: 'none', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              비어 있습니다.
               <button onClick={() => navigate('/')}>돌아가기</button>
             </div>
           )}
