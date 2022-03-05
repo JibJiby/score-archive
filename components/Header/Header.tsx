@@ -24,6 +24,8 @@ const Header = () => {
     try {
       signOut(auth)
       userSlice.actions.logout()
+      scoreSlice.actions.resetBasket()
+      scoreSlice.actions.resetResult()
     } catch (e) {
       console.error('로그아웃 중 에러.')
     }
