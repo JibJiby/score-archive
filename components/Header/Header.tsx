@@ -5,9 +5,12 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import logoImg from '@assets/logo.png'
+import { useDispatch } from 'react-redux'
+import scoreSlice from '@reducers/score'
 
 const Header = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [user] = useAuthState(auth)
 
   const onLogin = useCallback(() => {
@@ -23,6 +26,7 @@ const Header = () => {
       <Logo
         onClick={() => {
           navigate('/')
+          dispatch(scoreSlice.actions.resetResult())
         }}
       >
         <img src={logoImg} style={{ width: '100%' }} />
