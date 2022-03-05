@@ -1,15 +1,22 @@
+import React from 'react'
 import { RootState } from '@reducers/index'
 import scoreSlice, { ScoreState } from '@reducers/score'
-import { Image } from 'antd'
+import { Image, message } from 'antd'
 import JSZip from 'jszip'
-import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { saveAs } from 'file-saver'
 
 const Download = () => {
   const { basket } = useSelector<RootState, ScoreState>((state) => state.score)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const getImgBlob = async (href: string) => {
+    const response = await fetch(href)
+    const data = await response.blob() // Blob
+    return data
+  }
 
   return (
     <>
@@ -40,23 +47,35 @@ const Download = () => {
                 fontSize: '18px',
                 textAlign: 'center',
               }}
-              onClick={() => {
-                const zip = new JSZip()
-
-                const imgFolder = zip.folder('images')
-                // imgFolder?.file(`${}.jpeg`, null)
-                basket.forEach((v) => {
-                  imgFolder?.file(`${v.id}.jpeg`, null)
-                })
-
-                let promise: any = null
-                if (JSZip.support.uint8array) {
-                  promise = zip.generateAsync({ type: 'uint8array' })
-                } else {
-                  promise = zip.generateAsync({ type: 'string' })
-                }
-
+              onClick={async () => {
                 //TODO: url 가지고 blob 객체 만들어서 결과로 압축 파일 다운로드하게.
+                //https://velog.io/@ordidxzero/Image-URL%EC%9D%84-File-object%EB%A1%9C-%EB%B3%80%EA%B2%BD%ED%95%98%EA%B8%B0
+                // https://stove99.github.io/etc/2021/06/09/firebase-storage-cors-setting/
+                try {
+                  const result = await Promise.all(basket.map((v) => getImgBlob(v.href)))
+                  console.log('result')
+                  console.log(result)
+
+                  const zip = new JSZip()
+                  const imgFolder = zip.folder('images')
+                  // // imgFolder?.file(`${}.jpeg`, null)
+
+                  basket.forEach((v) => {
+                    imgFolder?.file(`${v.id}.jpeg`)
+                  })
+                  result.forEach((blob, i) => {
+                    imgFolder?.file(`${i}.${blob.type.split('/')[1]}`, blob)
+                  })
+                  const zipFile = await imgFolder?.generateAsync({ type: 'blob' }) // 압축 파일 생성
+                  if (zipFile) {
+                    saveAs(zipFile, 'images.zip')
+                  } else {
+                    console.error('zipFile XXX')
+                  }
+                } catch (e) {
+                  console.log(e)
+                  message.warn('다운로드 중 오류가 발생했습니다.', 0.8)
+                }
               }}
             >
               다운로드
@@ -75,6 +94,7 @@ const Download = () => {
                   flexDirection: 'column',
                   margin: '10px auto',
                 }}
+                key={v.href}
               >
                 <Image
                   src={v.href}
