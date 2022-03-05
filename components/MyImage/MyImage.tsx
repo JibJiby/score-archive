@@ -4,6 +4,7 @@ import { Image } from 'antd'
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MyImageWrapper } from './styles'
+import CheckIcon from '@assets/check.svg'
 
 interface Props {
   src: string
@@ -38,7 +39,25 @@ const MyImage: React.FC<Props> = ({ src }) => {
         onClick={onClick}
       />
       {basket?.find((v) => v.href === src) && (
-        <div style={{ position: 'absolute', backgroundColor: 'red', top: 40, right: 20, userSelect: 'none' }}>vv</div>
+        <div
+          style={{
+            position: 'absolute',
+            backgroundColor: 'transparent',
+            top: 40,
+            right: 20,
+            userSelect: 'none',
+
+            //
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CheckIcon
+            // 직적 svg width, height를 수정해줌 여기서 값으로 줘도 변경 안됨.
+            fill="#ffa8a8"
+          />
+        </div>
       )}
     </MyImageWrapper>
   )
