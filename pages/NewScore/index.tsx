@@ -33,14 +33,21 @@ const NewScore = () => {
       // ex)  검색하다가 '추가'로 넘어오면
       dispatch(scoreSlice.actions.resetResult())
     }
+
+    return () => {
+      // unMounted 에 상태값 초기화
+      dispatch(scoreSlice.actions.resetResult())
+      dispatch(scoreSlice.actions.resetAsyncState()) // 비동기 API 통신 관련 State 초기화
+    }
   }, [])
 
   useEffect(() => {
-    if (newScoreTitle && result) {
+    // newScoreTitle은 input 바뀔 때마다 실행되서 제외해야함.
+    if (result) {
       titleInputRef?.current?.blur()
       message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
     }
-  }, [newScoreTitle, result])
+  }, [result])
 
   useEffect(() => {
     if (addScoreDone) {

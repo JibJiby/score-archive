@@ -65,6 +65,15 @@ const scoreSlice = createSlice({
     resetBasket(state) {
       state.basket = null
     },
+    resetAsyncState(state) {
+      state.loadScoreLoading = false
+      state.loadScoreDone = false
+      state.loadScoreError = null
+
+      state.addScoreLoading = false
+      state.addScoreDone = false
+      state.addScoreError = null
+    },
     addBasket(state, action) {
       if (!state.basket) {
         // 빈 경우

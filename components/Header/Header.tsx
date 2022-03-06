@@ -23,9 +23,9 @@ const Header = () => {
   const onLogout = useCallback(() => {
     try {
       signOut(auth)
-      userSlice.actions.logout()
-      scoreSlice.actions.resetBasket()
-      scoreSlice.actions.resetResult()
+      dispatch(userSlice.actions.logout())
+      dispatch(scoreSlice.actions.resetBasket())
+      dispatch(scoreSlice.actions.resetResult())
     } catch (e) {
       console.error('로그아웃 중 에러.')
     }
