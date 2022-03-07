@@ -2,7 +2,7 @@ import { QueryResult } from '@reducers/score'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import convertConsonant from '@utils/convertContanent'
 import { message } from 'antd'
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where, doc } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { firestore, storage } from '../firebase'
 
