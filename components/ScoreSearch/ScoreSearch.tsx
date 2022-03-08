@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { SearchButton, SearchInput } from './styles'
+import { Container, HeaderText, SearchButton, SearchInput } from './styles'
 import useInput from '@hooks/useInput'
 import { auth } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -14,6 +14,7 @@ const ScoreSearch = () => {
   // const [scoreTitle, onChangeScoreTitle] = useInput('')
   const [scoreTitle, setScoreTitle] = useState('')
   const [scoreTitleList, setScoreTitleList] = useState<string[]>([])
+  const [candidateList, setCandidateList] = useState<string[]>([])
   const dispatch = useDispatch()
   const [user] = useAuthState(auth)
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -33,13 +34,14 @@ const ScoreSearch = () => {
       setScoreTitle(e.target.value)
 
       const noSpacedTitleList = scoreTitleList.map((v) => v.replace(/\s/g, ''))
-      const candidate = noSpacedTitleList.filter((v) => v.includes(scoreTitle))
+      const candidate = noSpacedTitleList.filter((v) => scoreTitle.length > 0 && v.includes(scoreTitle))
       if (scoreTitle.length > 0 && candidate.length > 0) {
         // console.log('후보 대상')
-        console.log(candidate)
+        // console.log(candidate)
+        setCandidateList([...candidate])
       }
     },
-    [scoreTitle, scoreTitleList],
+    [scoreTitle, scoreTitleList, candidateList],
   )
 
   // For Autocomplete
@@ -65,32 +67,15 @@ const ScoreSearch = () => {
   }, [result])
 
   return (
-    <div
-      style={{
-        width: '100%',
-        backgroundColor: '#f1f3f5',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          margin: '25px auto',
-          fontSize: '30px',
-          fontWeight: 700,
-          userSelect: 'none',
-          transition: 'all 0.5s',
-        }}
-      >
-        악보 검색
-      </div>
+    <Container>
+      <HeaderText>악보 검색</HeaderText>
       <div
         style={{
           width: '100%',
           display: 'flex',
-          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          position: 'relative',
         }}
       >
         <SearchInput
@@ -106,11 +91,25 @@ const ScoreSearch = () => {
             }
           }}
         />
-      </div>
+        {/* <div
+          style={{
+            backgroundColor: 'yellow',
+            position: 'absolute',
+            top: '100px',
+            left: '25%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <div>검색 후보들</div>
+          {candidateList.length > 0 && candidateList.map((v) => <div>{v}</div>)}
+        </div>
+      </div> */}
       <SearchButton onClick={onClickSearchBtn} ref={btnRef}>
         검색
       </SearchButton>
-    </div>
+    </Container>
   )
 }
 

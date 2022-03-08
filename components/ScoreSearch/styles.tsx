@@ -41,3 +41,20 @@ export const SearchButton = styled.button`
     opacity: 0.75;
   }
 `
+
+export const HeaderText = styled.div`
+  margin: 25px auto;
+  font-size: 30px;
+  font-weight: 700;
+  user-select: none;
+  transition: all 0.5s;
+`
+
+export const Container = styled.div`
+  width: 100%;
+  background-color: #f1f3f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
