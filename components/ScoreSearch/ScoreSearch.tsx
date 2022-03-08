@@ -104,8 +104,8 @@ const ScoreSearch = () => {
         >
           <div>검색 후보들</div>
           {candidateList.length > 0 && candidateList.map((v) => <div>{v}</div>)}
-        </div>
-      </div> */}
+        </div> */}
+      </div>
       <SearchButton onClick={onClickSearchBtn} ref={btnRef}>
         검색
       </SearchButton>
