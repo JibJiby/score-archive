@@ -73,8 +73,14 @@ const ScoreSearch = () => {
   // 관련 검색 기능
   useEffect(() => {
     if (scoreTitle) {
-      const noSpacedTitleList = scoreTitleList.map((v) => v.replace(/\s/g, ''))
-      const candidate = noSpacedTitleList.filter((v) => scoreTitle.length > 0 && v.includes(scoreTitle))
+      // const noSpacedTitleList = scoreTitleList.map((v) => v.replace(/\s/g, ''))
+      // const candidate = noSpacedTitleList.filter((v) => scoreTitle.length > 0 && v.includes(scoreTitle))
+
+      // 빈칸 포함.
+      const candidate = scoreTitleList.filter(
+        (v) => scoreTitle.length > 0 && v.replace(/\s/g, '').includes(scoreTitle.replace(/\s/g, '')),
+      )
+
       if (scoreTitle.length > 0 && candidate.length > 0) {
         setCandidateList([...candidate])
       }
