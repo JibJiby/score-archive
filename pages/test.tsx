@@ -1,5 +1,4 @@
 import React from 'react'
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 function Test() {
   return (
@@ -13,9 +12,7 @@ function Test() {
           // position: 'relative',
         }
       }
-    >
-      <ReactSearchAutocomplete items={[{ id: 0, name: 'abc' }]} />
-    </div>
+    ></div>
   )
 }
 
