@@ -26,6 +26,7 @@ const Header = () => {
       dispatch(userSlice.actions.logout())
       dispatch(scoreSlice.actions.resetBasket())
       dispatch(scoreSlice.actions.resetResult())
+      // FIXME:
       navigate('/')
     } catch (e) {
       console.error('로그아웃 중 에러.')

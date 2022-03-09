@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import loadable from '@loadable/component'
+import Test from '@pages/test'
 
 const Home = loadable(() => import('@pages/Home'))
 const LogIn = loadable(() => import('@pages/LogIn'))
@@ -16,6 +17,7 @@ const App = () => {
       <Route path="/login" element={<LogIn />} />
       <Route path="/newscore" element={<NewScore />} />
       <Route path="/download" element={<Download />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   )
 }
