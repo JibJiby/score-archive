@@ -30,6 +30,8 @@ const ScoreSearch = () => {
       message.warn('로그인이 필요합니다.')
       return
     }
+    console.log('user')
+    console.log(user)
     dispatch(getScore(scoreTitle))
   }, [user, scoreTitle])
 

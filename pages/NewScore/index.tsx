@@ -43,7 +43,9 @@ const NewScore = () => {
 
   useEffect(() => {
     // newScoreTitle은 input 바뀔 때마다 실행되서 제외해야함.
-    if (result) {
+    // 의존성 배열에 안넣은 이유는 index -> newscore 페이지로 넘어올때 여기가 실행되기 때문에
+    // newScoreTitle 초기값만 비교하는데 사용하면 message가 안뜰듯.
+    if (result && newScoreTitle) {
       titleInputRef?.current?.blur()
       message.info('같은 제목으로 이미 등록되어 있습니다.', 0.8)
     }
