@@ -5,6 +5,7 @@ import { message } from 'antd'
 import { addDoc, collection, getDocs, query, where, doc } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { firestore, storage } from '../firebase'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getScore = createAsyncThunk('score/getScore', async (scoreTitle: string, thunkAPI) => {
   try {
@@ -50,7 +51,8 @@ export const addScore = createAsyncThunk(
   ) => {
     const { newScoreTitle, fileType, selectedFile, uploadFile } = data
 
-    const encodedName = encodeURI(newScoreTitle)
+    // const encodedName = encodeURI(newScoreTitle)
+    const encodedName = uuidv4()
     const newFileHref = `images/${encodedName}.${fileType.split('/')[1]}`
     const newFileRef = ref(storage, newFileHref)
     await uploadFile(newFileRef, selectedFile, {
@@ -85,7 +87,8 @@ export const addSecondScore = createAsyncThunk(
   ) => {
     const { newScoreTitle, newSecondScoreTitle, fileType, selectedFile, uploadFile } = data
 
-    const encodedName = encodeURI(newScoreTitle)
+    // const encodedName = encodeURI(newScoreTitle)
+    const encodedName = uuidv4()
     const newFileHref = `images/${encodedName}.${fileType.split('/')[1]}`
     const newFileRef = ref(storage, newFileHref)
     await uploadFile(newFileRef, selectedFile, {
