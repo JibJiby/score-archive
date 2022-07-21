@@ -1,8 +1,6 @@
 import React from 'react'
 import { RootState } from '@reducers/index'
-import { Image, Spin } from 'antd'
 import { useSelector } from 'react-redux'
-import BackTop from '@components/BackTop'
 import Spinner from '@components/Spinner'
 import MyImage from '@components/MyImage'
 import Basket from '@components/Basket'
